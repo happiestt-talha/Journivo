@@ -1,12 +1,12 @@
 {
-  "name": "Journivo",
+  "name": "Journivo: The Heartbeat of Your Thoughts.",
   "short_name": "Journivo",
   "description": "Journivo: Your go-to blog app for capturing moments, sharing stories, and inspiring others.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "red",
   "theme_color": "#323C78",
-  "orientation": "landscape",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "./logo-192.png",

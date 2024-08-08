@@ -9,7 +9,7 @@ export default function Header() {
     return (
         <Navbar className='border-b-2'>
             <Link to="/" className="flex items-center">
-                <img src={logo} alt="Journivo" />
+                <img className='hidden md:inline' src={logo} alt="Journivo" />
 
                 <span
                     className="self-center whitespace-nowrap text-xl font-semibold
@@ -18,7 +18,7 @@ export default function Header() {
                     Journivo</span>
 
                 <span
-                    className='font-bold text-xl'
+                    className='font-bold text-xl hidden md:inline'
                 >'s Blog</span>
             </Link>
             <form>
