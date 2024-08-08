@@ -4,8 +4,8 @@
   "description": "Journivo: Your go-to blog app for capturing moments, sharing stories, and inspiring others.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#46ADD9",
-  "theme_color": "#4a90e2",
+  "background_color": "red",
+  "theme_color": "#323C78",
   "orientation": "portrait",
   "icons": [
     {
