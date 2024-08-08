@@ -1,0 +1,23 @@
+{
+  "name": "Journivo",
+  "short_name": "Journivo",
+  "description": "Journivo: Your go-to blog app for capturing moments, sharing stories, and inspiring others.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#46ADD9",
+  "theme_color": "#4a90e2",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "lang": "en-US"
+}
