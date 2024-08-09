@@ -6,6 +6,23 @@ import logo from '../assets/icons/blog-50.png'
 
 export default function Header() {
     const path = useLocation().pathname;
+    const data = [
+        {
+            id: 1,
+            name: 'Home',
+            path: '/'
+        },
+        {
+            id: 2,
+            name: 'About',
+            path: '/about'
+        },
+        {
+            id: 3,
+            name: 'Projects',
+            path: '/projects'
+        }
+    ]
     return (
         <Navbar className='border-b-2'>
             <Link to="/" className="flex items-center">
@@ -29,9 +46,11 @@ export default function Header() {
                     className='hidden lg:inline'
                 />
             </form>
+
             <Button className='w-12 h-10 lg:hidden' color='gray' pill>
                 <AiOutlineSearch />
             </Button>
+            
             <div className='flex gap-2 md:order-2'>
                 <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
                     <FaMoon />
@@ -42,15 +61,18 @@ export default function Header() {
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
-                <Navbar.Link active={path === "/"} as={'div'}>
-                    <Link to='/'>Home</Link>
-                </Navbar.Link>
-                <Navbar.Link active={path === "/about"} as={'div'}>
-                    <Link to='/about'>About</Link>
-                </Navbar.Link>
-                <Navbar.Link active={path === "/projects"} as={'div'}>
-                    <Link to='/projects'>Projects</Link>
-                </Navbar.Link>
+                {
+                    data.map((item) => (
+                        <Navbar.Link
+                            key={item.id}
+                            active={path === item.path}
+                            as={Link}
+                            to={item.path}
+                        >
+                            {item.name}
+                        </Navbar.Link>
+                    ))
+                }
             </Navbar.Collapse>
         </Navbar>
     );
