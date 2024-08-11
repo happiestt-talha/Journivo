@@ -1,8 +1,34 @@
 import { Button, Label, TextInput } from 'flowbite-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 const Signup = () => {
+    const [input, setInput] = useState({
+        username: '',
+        email: '',
+        password: ''
+    })
+    const [user, setUser] = useState(undefined)
+
+    const handleChange = (e) => {
+        setInput((prev) => {
+            return { ...prev, [e.target.name]: e.target.value };
+        });
+    }
+
+    const handleSubmit =async (e) => {
+        e.preventDefault();
+        
+        try {
+            const res= await axios.post('http://localhost:5000/api/auth/signup',input)
+            console.log(res)
+            setUser(res.data)
+        } catch (error) {
+            console.log('Sign up error', error)
+            alert(error.message)
+        }
+    }
     return (
         <>
             <div className='max-h-screen'>
@@ -28,17 +54,17 @@ const Signup = () => {
                         <form className='flex flex-col gap-5'>
                             <div>
                                 <Label value='Your username' />
-                                <TextInput type='text' placeholder='username' id='username' />
+                                <TextInput type='text' placeholder='username' id='username' onChange={handleChange} value={input.username} name='username'/>
                             </div>
                             <div>
                                 <Label value='Your email' />
-                                <TextInput type='email' placeholder='name@company.com' id='email' />
+                                <TextInput type='email' placeholder='name@company.com' id='email' onChange={handleChange} value={input.email} name='email'/>
                             </div>
                             <div>
                                 <Label value='Your password' />
-                                <TextInput type='password' placeholder='password' id='password' />
+                                <TextInput type='password' placeholder='password' id='password' onChange={handleChange} value={input.password} name='password'/>
                             </div>
-                            <Button gradientDuoTone={"purpleToBlue"} type='submit' >Sign up</Button>
+                            <Button gradientDuoTone={"purpleToBlue"} type='submit' onClick={handleSubmit} >Sign up</Button>
                         </form>
 
                         <div className='flex gap-3 text-sm mt-5 '>
@@ -46,6 +72,12 @@ const Signup = () => {
                             <Link to={'/sign-in'} className='text-blue-500 underline'>Sign in</Link>
                         </div>
 
+                        <div>
+                            {
+                                user? <p>Hello {user.username}</p>
+                                    : <p>No user</p>
+                            }
+                        </div>
                     </div>
 
                 </div>
