@@ -29,10 +29,10 @@ app.use('/api/user',userRoutes)
 
 // Error Middleware
 app.use((error,req,res,next) => {
-    const statuscode = error.statusCode || 500
-    const message = error.message
-    res.status(statuscode).json({
-        statuscode,
+    const status = error.status || 500
+    const message = error.message || "Something went wrong"
+    res.status(status).json({
+        status,
         message
     })
 })
