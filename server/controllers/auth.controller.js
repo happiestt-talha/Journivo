@@ -37,17 +37,16 @@ export const signin = async (req, res, next) => {
         return next(createError(400, "Please fill all the fields"));
     }
     try {
-
         const user = await User.findOne({ email })
         if (!user) {
             return next(createError(400, "User not found"));
         }
-        
+
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) {
             return next(createError(400, "Wrong password"));
         }
-        
+
         res.status(200).json(user);
     } catch (error) {
         next(createError(500, error));
