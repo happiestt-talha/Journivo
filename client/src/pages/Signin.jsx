@@ -2,12 +2,17 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Label, TextInput, Button } from 'flowbite-react'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { loginFailure, loginStart, loginSuccess } from '../store/userSlice'
+// import { login } from '../api/Auth'
 
 const Signin = () => {
+    const dispatch = useDispatch()
     const [input, setInput] = useState({
         email: '',
         password: ''
     })
+    //eslint-disable-next-line
     const [user, setUser] = useState(null)
     const handleChange = (e) => {
         setInput((prev) => {
@@ -17,18 +22,23 @@ const Signin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!input.email || !input.password || input.email === "" || input.password === "") return
+        if (!input.email || !input.password || input.email === "" || input.password === "") return
         try {
-            console.log('Signing in...')
-            console.log('input: ',input)
-            const res=await axios.post('/auth/signin',input)
+            // console.log('Signing in...')
+            // console.log('input: ',input)
+            dispatch(loginStart())
+            const res = await axios.post('/auth/signin', input)
             console.log(res.data)
+            dispatch(loginSuccess(res.data))
             setUser(res.data)
-            console.log('user: ',user)
+            console.log('user: ', user)
         } catch (error) {
             console.log('Sign in error', error)
+            dispatch(loginFailure())
             alert(error.message)
         }
+        // login(input, setUser)
+
     }
 
     const handleTest = async () => {
@@ -37,7 +47,7 @@ const Signin = () => {
             console.log(res)
         } catch (error) {
             console.log('Sign in test error', error)
-            alert(error.message)   
+            alert(error.message)
         }
     }
     return (

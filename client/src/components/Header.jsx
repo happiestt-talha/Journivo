@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon } from 'react-icons/fa';
 import logo from '../assets/icons/blog-50.png'
+import { useSelector } from 'react-redux';
 
 export default function Header() {
     const path = useLocation().pathname;
@@ -23,6 +24,7 @@ export default function Header() {
             path: '/projects'
         }
     ]
+    const { currentUser } = useSelector((state) => state.user)
     return (
         <Navbar className='border-b-2'>
             <Link to="/" className="flex items-center">
@@ -50,14 +52,18 @@ export default function Header() {
             <Button className='w-12 h-10 lg:hidden' color='gray' pill>
                 <AiOutlineSearch />
             </Button>
-            
+
             <div className='flex gap-2 md:order-2'>
                 <Button className='w-12 h-10 hidden sm:inline' color='gray' pill>
                     <FaMoon />
                 </Button>
-                <Link to='/sign-in'>
-                    <Button gradientDuoTone='purpleToBlue'>Sign In</Button>
-                </Link>
+                {
+                    currentUser
+                        ? <Button gradientDuoTone='purpleToBlue'>Sign Out</Button>
+                        : <Link to='/sign-in'>
+                            <Button gradientDuoTone='purpleToBlue'>Sign In</Button>
+                        </Link>
+                }
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
