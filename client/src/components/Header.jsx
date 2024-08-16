@@ -59,7 +59,7 @@ export default function Header() {
                 </Button>
                 {
                     currentUser
-                        ? <Button gradientDuoTone='purpleToBlue'>Sign Out</Button>
+                        ? "Hello " + currentUser.username + "!"
                         : <Link to='/sign-in'>
                             <Button gradientDuoTone='purpleToBlue'>Sign In</Button>
                         </Link>

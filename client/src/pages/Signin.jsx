@@ -34,7 +34,7 @@ const Signin = () => {
             console.log('user: ', user)
         } catch (error) {
             console.log('Sign in error', error)
-            dispatch(loginFailure())
+            dispatch(loginFailure(error.message))
             alert(error.message)
         }
         // login(input, setUser)
