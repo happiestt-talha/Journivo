@@ -2,14 +2,17 @@ import { Button, Label, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginFailure, loginStart, loginSuccess } from '../store/userSlice'
 
 const Signup = () => {
+    const dispatch = useDispatch()
+    const { currentUser } = useSelector((state) => state.user)
     const [input, setInput] = useState({
         username: '',
         email: '',
         password: ''
     })
-    const [user, setUser] = useState(undefined)
 
     const handleChange = (e) => {
         setInput((prev) => {
@@ -17,16 +20,16 @@ const Signup = () => {
         });
     }
 
-    const handleSubmit =async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
-            const res= await axios.post('http://localhost:5000/api/auth/signup',input)
+            dispatch(loginStart())
+            const res = await axios.post('http://localhost:5000/api/auth/signup', input)
             console.log(res)
-            setUser(res.data)
+            dispatch(loginSuccess(res.data))
         } catch (error) {
-            console.log('Sign up error', error)
-            alert(error.message)
+            dispatch(loginFailure(error.message))
         }
     }
     return (
@@ -54,15 +57,15 @@ const Signup = () => {
                         <form className='flex flex-col gap-5'>
                             <div>
                                 <Label value='Your username' />
-                                <TextInput type='text' placeholder='username' id='username' onChange={handleChange} value={input.username} name='username'/>
+                                <TextInput type='text' placeholder='username' id='username' onChange={handleChange} value={input.username} name='username' />
                             </div>
                             <div>
                                 <Label value='Your email' />
-                                <TextInput type='email' placeholder='name@company.com' id='email' onChange={handleChange} value={input.email} name='email'/>
+                                <TextInput type='email' placeholder='name@company.com' id='email' onChange={handleChange} value={input.email} name='email' />
                             </div>
                             <div>
                                 <Label value='Your password' />
-                                <TextInput type='password' placeholder='password' id='password' onChange={handleChange} value={input.password} name='password'/>
+                                <TextInput type='password' placeholder='password' id='password' onChange={handleChange} value={input.password} name='password' />
                             </div>
                             <Button gradientDuoTone={"purpleToBlue"} type='submit' onClick={handleSubmit} >Sign up</Button>
                         </form>
@@ -74,7 +77,7 @@ const Signup = () => {
 
                         <div>
                             {
-                                user? <p>Hello {user.username}</p>
+                                currentUser ? <p>Hello {currentUser.username}</p>
                                     : <p>No user</p>
                             }
                         </div>
