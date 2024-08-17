@@ -4,6 +4,7 @@ import { Label, TextInput, Button } from 'flowbite-react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { loginFailure, loginStart, loginSuccess } from '../store/userSlice'
+import OAuth from '../components/Auth/OAuth'
 // import { login } from '../api/Auth'
 
 const Signin = () => {
@@ -41,15 +42,6 @@ const Signin = () => {
 
     }
 
-    const handleTest = async () => {
-        try {
-            const res = await axios.get('/auth/test')
-            console.log(res)
-        } catch (error) {
-            console.log('Sign in test error', error)
-            alert(error.message)
-        }
-    }
     return (
         <>
             <div className='max-h-screen'>
@@ -67,7 +59,7 @@ const Signin = () => {
                                 <TextInput type='password' placeholder='password' id='password' value={input.password} onChange={handleChange} />
                             </div>
                             <Button gradientDuoTone={"purpleToBlue"} type='submit' >Sign in</Button>
-                            <Button gradientDuoTone={"purpleToBlue"} onClick={handleTest}  >Test</Button>
+                            <OAuth/>
                         </form>
 
                         <div className='flex gap-3 text-sm mt-5 '>

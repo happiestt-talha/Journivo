@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { signin, signUp } from '../controllers/auth.controller.js';
+import { google, signin, signUp } from '../controllers/auth.controller.js';
 
 router.get("/test", (req, res) => {
     res.send("Auth test route!");
@@ -8,5 +8,5 @@ router.get("/test", (req, res) => {
 
 router.post("/signup", signUp)
 router.post("/signin", signin)
-
+router.post("/google", google)
 export default router

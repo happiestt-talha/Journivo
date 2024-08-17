@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginFailure, loginStart, loginSuccess } from '../store/userSlice'
+import OAuth from '../components/Auth/OAuth'
 
 const Signup = () => {
     const dispatch = useDispatch()
@@ -68,6 +69,7 @@ const Signup = () => {
                                 <TextInput type='password' placeholder='password' id='password' onChange={handleChange} value={input.password} name='password' />
                             </div>
                             <Button gradientDuoTone={"purpleToBlue"} type='submit' onClick={handleSubmit} >Sign up</Button>
+                            <OAuth/>
                         </form>
 
                         <div className='flex gap-3 text-sm mt-5 '>
