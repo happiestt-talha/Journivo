@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { AiFillGoogleCircle } from 'react-icons/ai';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { app } from '../../firebase/Firebase';
-import { loginFailure, loginStart, loginSuccess } from '../../store/userSlice';
+import { loginFailure, loginStart, loginSuccess } from '../../store/user/userSlice.js';
 
 const OAuth = () => {
     const dispatch = useDispatch();

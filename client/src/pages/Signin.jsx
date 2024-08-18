@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Label, TextInput, Button } from 'flowbite-react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { loginFailure, loginStart, loginSuccess } from '../store/userSlice'
+import { loginFailure, loginStart, loginSuccess } from '../store/user/userSlice'
 import OAuth from '../components/Auth/OAuth'
 // import { login } from '../api/Auth'
 

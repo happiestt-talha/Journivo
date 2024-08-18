@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginFailure, loginStart, loginSuccess } from '../store/userSlice'
+import { loginFailure, loginStart, loginSuccess } from '../store/user/userSlice'
 import OAuth from '../components/Auth/OAuth'
 
 const Signup = () => {

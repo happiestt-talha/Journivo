@@ -6,13 +6,16 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { persistor, store } from './store/store';
 import { PersistGate } from 'redux-persist/integration/react'
+import ThemeProvider from './theme/ThemeProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <PersistGate persistor={persistor}>
       <Provider store={store}>
-        <App />
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
       </Provider>
     </PersistGate>
   </React.StrictMode>
