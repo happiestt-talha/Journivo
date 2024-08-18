@@ -8,6 +8,7 @@ import Signin from './pages/Signin'
 import Signup from './pages/Signup'
 import Header from './components/Header'
 import FooterComp from './components/FooterComp'
+import PrivateRoutes from './security/PrivateRoutes'
 
 const App = () => {
   return (
@@ -15,12 +16,16 @@ const App = () => {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path='/' element={<Home />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/projects' element={<Projects />} />
           <Route path='/about' element={<About />} />
           <Route path='/sign-in' element={<Signin />} />
           <Route path='/sign-up' element={<Signup />} />
+
+          <Route element={<PrivateRoutes />}>
+            <Route path='/' element={<Home />} />
+          </Route>
+
         </Routes>
         <FooterComp />
       </BrowserRouter>
