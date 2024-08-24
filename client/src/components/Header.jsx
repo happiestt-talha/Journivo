@@ -5,6 +5,7 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 import logo from '../assets/icons/blog-50.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../store/theme/themeSlice';
+import { logout } from '../store/user/userSlice';
 
 export default function Header() {
     const path = useLocation().pathname;
@@ -32,7 +33,7 @@ export default function Header() {
         dispatch(toggleTheme())
     }
     const handleSignOut = () => {
-
+        dispatch(logout())
     }
     return (
         <Navbar className='border-b-2'>
