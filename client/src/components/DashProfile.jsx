@@ -6,6 +6,8 @@ import { app } from '../firebase/Firebase'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CircularProgressBar from "circular-progress-bar";
+
 const DashProfile = () => {
     const dispatch = useDispatch()
     const { currentUser } = useSelector((state) => state.user)
@@ -103,7 +105,9 @@ const DashProfile = () => {
                 <form className="flex flex-col gap-4">
                     <TextInput type='file' accept='image/*' onChange={handleImageOnChange} ref={fileRef} className='hidden' />
                     <span className='bg-gray-400 rounded-full w-36 h-36 flex items-center mx-auto'>
-                        <img src={imgUrl || currentUser?.profilePic} alt="Could not be loaded" className='w-32 h-32 rounded-full mx-auto cursor-pointer' onClick={() => fileRef.current.click()} />
+                        <img src={imgUrl || currentUser?.profilePic} alt="Could not be loaded" className='relative w-32 h-32 rounded-full mx-auto cursor-pointer' onClick={() => fileRef.current.click()} />
+                        <CircularProgressBar progress={progress} />
+                        <p className='text-center text-red-500'>{uploadError}</p>
                     </span>
                     <Button gradientDuoTone="purpleToBlue" outline onClick={notify}>Notify</Button>
 
