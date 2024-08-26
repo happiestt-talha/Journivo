@@ -24,9 +24,11 @@ export const signUp = async (req, res, next) => {
             password: hashedPassword,
         })
 
-        const token = generateToken(newUser._id)
+        const savedUser = await newUser.save();
+        const token = generateToken(savedUser._id)
+        // console.log('token: ', token)
 
-        const { password: others, ...rest } = newUser._doc
+        const { password: others, ...rest } = savedUser._doc
 
         res.cookie("access_token", token, {
             httpOnly: true,
@@ -55,6 +57,8 @@ export const signin = async (req, res, next) => {
 
         const token = generateToken(user._id)
 
+        // console.log('token: ', token)
+
         const { password: others, ...rest } = user._doc
 
         res.cookie("access_token", token, {
@@ -72,6 +76,7 @@ export const google = async (req, res, next) => {
 
         if (user) {
             const token = generateToken(user._id);
+            // console.log('token: ', token)
             const { password, ...others } = user._doc;
 
             return res
@@ -91,6 +96,7 @@ export const google = async (req, res, next) => {
 
             const savedUser = await newUser.save();
             const token = generateToken(savedUser._id);
+            // console.log('token: ', token)
             const { password, ...others } = savedUser._doc;
 
             return res

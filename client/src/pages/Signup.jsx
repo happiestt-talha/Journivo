@@ -1,12 +1,13 @@
 import { Button, Label, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginFailure, loginStart, loginSuccess } from '../store/user/userSlice'
 import OAuth from '../components/Auth/OAuth'
 
 const Signup = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const { currentUser } = useSelector((state) => state.user)
     const [input, setInput] = useState({
@@ -26,9 +27,10 @@ const Signup = () => {
 
         try {
             dispatch(loginStart())
-            const res = await axios.post('http://localhost:5000/api/auth/signup', input)
+            const res = await axios.post('/auth/signup', input)
             console.log(res)
             dispatch(loginSuccess(res.data))
+            navigate('/')
         } catch (error) {
             dispatch(loginFailure(error.message))
         }

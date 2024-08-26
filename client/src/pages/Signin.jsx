@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Label, TextInput, Button } from 'flowbite-react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
@@ -8,6 +8,7 @@ import OAuth from '../components/Auth/OAuth'
 // import { login } from '../api/Auth'
 
 const Signin = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [input, setInput] = useState({
         email: '',
@@ -31,12 +32,12 @@ const Signin = () => {
             const res = await axios.post('/auth/signin', input)
             console.log(res.data)
             dispatch(loginSuccess(res.data))
+            navigate('/')
             setUser(res.data)
             console.log('user: ', user)
         } catch (error) {
             console.log('Sign in error', error)
             dispatch(loginFailure(error.message))
-            alert(error.message)
         }
         // login(input, setUser)
 
@@ -59,7 +60,7 @@ const Signin = () => {
                                 <TextInput type='password' placeholder='password' id='password' value={input.password} onChange={handleChange} />
                             </div>
                             <Button gradientDuoTone={"purpleToBlue"} type='submit' >Sign in</Button>
-                            <OAuth/>
+                            <OAuth />
                         </form>
 
                         <div className='flex gap-3 text-sm mt-5 '>
