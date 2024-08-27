@@ -1,7 +1,7 @@
 import { Alert, Button, TextInput } from 'flowbite-react'
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, updateFailure, updateStart, updateSuccess } from '../store/user/userSlice'
+import { deleteFailure, deleteStart, deleteSuccess, logout, updateFailure, updateStart, updateSuccess } from '../store/user/userSlice'
 import { app } from '../firebase/Firebase'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,10 +22,10 @@ const DashProfile = () => {
     const [updateProfileSuccess, setUpdateProfileSuccess] = useState('')
     const [uploading, setUploading] = useState(false)
     const [formData, setFormData] = useState({
-        username: '',
-        email: '',
+        username: currentUser.username || '',
+        email: currentUser.email || '',
         password: '',
-        profilePic: ''
+        profilePic: currentUser.profilePic || ''
     })
 
     const handleImageOnChange = (e) => {
@@ -81,13 +81,13 @@ const DashProfile = () => {
         }
     }, [handleImageUpload, img])
 
-    const handleSignOut = () => {
-        dispatch(logout())
-    }
-
     const handleFormChange = (e) => {
-        setFormData({ ...formData, [e.target.id]: e.target.value });
-        console.log('formData: ', formData)
+        const { id, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [id]: value
+        }));
+        console.log('formData: ', formData);
     }
 
     const handleEditProfile = async (e) => {
@@ -99,7 +99,19 @@ const DashProfile = () => {
             return setUpdateProfileError('No Changes made')
         }
         if (uploading) {
-            return setUpdateProfileError('Please wait while image is uploading...')
+            return setUpdateProfileError('Please wait while image is uploading...');
+        }
+
+        // Filter out fields that are not modified
+        const updatedData = Object.keys(formData).reduce((acc, key) => {
+            if (formData[key] !== '' && formData[key] !== currentUser[key]) {
+                acc[key] = formData[key];
+            }
+            return acc;
+        }, {});
+
+        if (Object.keys(updatedData).length === 0) {
+            return setUpdateProfileError('No changes made');
         }
         setUpdateProfileSuccess(null)
         setUpdateProfileError(null)
@@ -113,12 +125,39 @@ const DashProfile = () => {
                 dispatch(updateSuccess(res.data))
                 setUpdateProfileError('')
             } else {
-                setUpdateProfileError(res.data)
+                console.log('Error Data: ', res.data)
+                setUpdateProfileError(res.data.message)
                 setUpdateProfileSuccess('')
-                dispatch(updateFailure(res.data))
+                dispatch(updateFailure(res.data.message))
             }
         } catch (error) {
-            setUpdateProfileError(error.message)
+            console.log('Fetch Error: ', error)
+            setUpdateProfileError(error.response.data.message)
+        }
+    }
+
+    const handleSignOut = async () => {
+        const res = await axios.post('/user/logout')
+        console.log('res: ', res)
+        if (res.status === 200) {
+            dispatch(logout())
+        }
+    }
+
+    const handleDeleteAccount = async () => {
+        try {
+            dispatch(deleteStart())
+            const res = await axios.delete(`/user/delete/${currentUser._id}`)
+            console.log('res: ', res)
+            if (res.status === 200) {
+                dispatch(deleteSuccess())
+            }
+            else {
+                dispatch(deleteFailure("Account Couldn't be deleted"))
+            }
+
+        } catch (error) {
+            dispatch(deleteFailure(error.message))
         }
     }
     return (
@@ -152,13 +191,13 @@ const DashProfile = () => {
 
                     </span>
                     {uploadError && <Alert color="failure">{uploadError}</Alert>}
-                    <TextInput onChange={handleFormChange} type="name" id="name" label="username" placeholder='Username' defaultValue={currentUser?.username} />
+                    <TextInput onChange={handleFormChange} type="name" id="username" label="username" placeholder='Username' defaultValue={currentUser?.username} />
                     <TextInput onChange={handleFormChange} type="email" id="email" label="Email address" placeholder='Email address' defaultValue={currentUser?.email} />
-                    <TextInput onChange={handleFormChange} type="pssword" id="password" label="Password" placeholder='**********' />
+                    <TextInput onChange={handleFormChange} type="password" id="password" label="Password" placeholder='**********' />
                     <Button gradientDuoTone="purpleToBlue" outline onClick={handleEditProfile} >Update</Button>
                 </form>
                 <div className='text-red-500 flex justify-between mt-3 '>
-                    <span className='cursor-pointer hover:text-red-700 '>Delete Account</span>
+                    <span className='cursor-pointer hover:text-red-700 ' onClick={handleDeleteAccount}>Delete Account</span>
                     <span className='cursor-pointer hover:text-red-700 ' onClick={handleSignOut}>Sign Out</span>
                 </div>
 

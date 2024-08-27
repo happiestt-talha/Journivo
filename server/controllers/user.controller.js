@@ -3,7 +3,7 @@ import User from "../models/user.model.js"
 import bcrypt from 'bcrypt'
 
 export const updateUser = async (req, res, next) => {
-    
+
     // console.log('req.user: ', req.user)
 
     if (req.user.id !== req.params.id) {
@@ -29,7 +29,7 @@ export const updateUser = async (req, res, next) => {
             return next(createError(403, "Username can only contain letters and numbers"))
         }
         if (req.body.username.includes(" ")) {
-            return next(createError(403, "Username cannot contain spaces"))
+            return createError(403, "Username cannot contain spaces")
         }
         if (req.body.username !== req.body.username.toLowerCase()) {
             return next(createError(403, "Username must be lowercase"))
@@ -50,5 +50,29 @@ export const updateUser = async (req, res, next) => {
         res.status(200).json(updatedUser)
     } catch (err) {
         next(err)
+    }
+}
+
+export const deleteUser = async (req, res, next) => {
+    try {
+        if (req.user.id !== req.params.id) {
+            return next(createError(403, "You can delete only your account!"))
+        } else {
+            await User.findByIdAndDelete(req.params.id)
+            res.status(200).json("User has been deleted!")
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const signout = async (req, res, next) => {
+    try {
+        res
+            .clearCookie("access_token")
+            .status(200)
+            .json("User has been signed out!")
+    } catch (error) {
+        next(error)
     }
 }

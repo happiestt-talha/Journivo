@@ -6,6 +6,7 @@ import logo from '../assets/icons/blog-50.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleTheme } from '../store/theme/themeSlice';
 import { logout } from '../store/user/userSlice';
+import axios from 'axios'
 
 export default function Header() {
     const path = useLocation().pathname;
@@ -32,8 +33,12 @@ export default function Header() {
     const handleTheme = () => {
         dispatch(toggleTheme())
     }
-    const handleSignOut = () => {
-        dispatch(logout())
+    const handleSignOut = async () => {
+        const res = await axios.post('/user/logout')
+        console.log('res: ', res)
+        if (res.status === 200) {
+            dispatch(logout())
+        }
     }
     return (
         <Navbar className='border-b-2'>

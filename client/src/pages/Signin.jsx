@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Label, TextInput, Button } from 'flowbite-react'
+import { Label, TextInput, Button, Alert, Spinner } from 'flowbite-react'
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { loginFailure, loginStart, loginSuccess } from '../store/user/userSlice'
 import OAuth from '../components/Auth/OAuth'
 // import { login } from '../api/Auth'
 
 const Signin = () => {
+    const { error, loading } = useSelector((state) => state.user)
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [input, setInput] = useState({
@@ -30,14 +31,14 @@ const Signin = () => {
             // console.log('input: ',input)
             dispatch(loginStart())
             const res = await axios.post('/auth/signin', input)
-            console.log(res.data)
+            // console.log(res.data)
             dispatch(loginSuccess(res.data))
             navigate('/')
             setUser(res.data)
-            console.log('user: ', user)
+            // console.log('user: ', user)
         } catch (error) {
-            console.log('Sign in error', error)
-            dispatch(loginFailure(error.message))
+            // console.log('Sign in error', error.response.data.message)
+            dispatch(loginFailure(error.response.data.message))
         }
         // login(input, setUser)
 
@@ -47,7 +48,9 @@ const Signin = () => {
         <>
             <div className='max-h-screen'>
                 <div className='mt-10 flex p-3 max-w-4xl mx-auto flex-col md:flex-row md:items-center gap-5'>
-
+                    {
+                        error && <Alert color='failure'>{error}</Alert>
+                    }
                     <div className='flex-1 order-2 md:order-1'>
 
                         <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
@@ -59,7 +62,16 @@ const Signin = () => {
                                 <Label value='Your password' />
                                 <TextInput type='password' placeholder='password' id='password' value={input.password} onChange={handleChange} />
                             </div>
-                            <Button gradientDuoTone={"purpleToBlue"} type='submit' >Sign in</Button>
+                            <Button gradientDuoTone={"purpleToBlue"} type='submit' >
+                                <span className='flex items-center gap-2'>
+
+                                    {
+                                        loading
+                                            ? <><Spinner aria-label="Extra large spinner button example" size="md" /> Loading...</>
+                                            : 'Sign in'
+                                    }
+                                </span>
+                            </Button>
                             <OAuth />
                         </form>
 

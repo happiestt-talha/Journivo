@@ -25,19 +25,20 @@ app.get('/', (req, res) => {
 })
 
 // App Routes
-app.use('/api/auth',authRoutes)
-app.use('/api/user',userRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/user', userRoutes)
 
 
 // Error Middleware
-app.use((error,req,res,next) => {
-    const status = error.status || 500
-    const message = error.message || "Something went wrong"
-    res.status(status).json({
-        status,
+app.use((err, req, res, next) => {
+    const statusCode = err.status || 500;
+    const message = err.message || 'Internal Server Error';
+    res.status(statusCode).json({
+        status: statusCode,
         message
-    })
-})
+    });
+});
+
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port http://localhost:${process.env.PORT}`);
