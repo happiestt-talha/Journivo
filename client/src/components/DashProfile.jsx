@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteFailure, deleteStart, deleteSuccess, logout, updateFailure, updateStart, updateSuccess } from '../store/user/userSlice'
 import { app } from '../firebase/Firebase'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import 'react-toastify/dist/ReactToastify.css';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import axios from 'axios'
