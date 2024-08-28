@@ -15,8 +15,6 @@ const Signin = () => {
         email: '',
         password: ''
     })
-    //eslint-disable-next-line
-    const [user, setUser] = useState(null)
     const handleChange = (e) => {
         setInput((prev) => {
             return { ...prev, [e.target.id]: e.target.value }
@@ -34,7 +32,6 @@ const Signin = () => {
             // console.log(res.data)
             dispatch(loginSuccess(res.data))
             navigate('/')
-            setUser(res.data)
             // console.log('user: ', user)
         } catch (error) {
             // console.log('Sign in error', error.response.data.message)
@@ -48,10 +45,12 @@ const Signin = () => {
         <>
             <div className='max-h-screen'>
                 <div className='mt-10 flex p-3 max-w-4xl mx-auto flex-col md:flex-row md:items-center gap-5'>
-                    {
-                        error && <Alert color='failure'>{error}</Alert>
-                    }
                     <div className='flex-1 order-2 md:order-1'>
+                        <span>
+                            {
+                                error && <Alert className='max-w-2xl mx-auto' color='failure'>{error}</Alert>
+                            }
+                        </span>
 
                         <form className='flex flex-col gap-5' onSubmit={handleSubmit}>
                             <div>

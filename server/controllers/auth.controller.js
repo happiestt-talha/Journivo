@@ -25,7 +25,7 @@ export const signUp = async (req, res, next) => {
         })
 
         const savedUser = await newUser.save();
-        const token = generateToken(savedUser._id)
+        const token = generateToken(savedUser._id,savedUser.isAdmin)
         // console.log('token: ', token)
 
         const { password: others, ...rest } = savedUser._doc
@@ -55,9 +55,9 @@ export const signin = async (req, res, next) => {
             return next(createError(400, "Wrong password"));
         }
 
-        const token = generateToken(user._id)
+        const token = generateToken(user._id,user.isAdmin)
 
-        // console.log('token: ', token)
+        console.log('token: ', token)
 
         const { password: others, ...rest } = user._doc
 
@@ -75,7 +75,7 @@ export const google = async (req, res, next) => {
         let user = await User.findOne({ email });
 
         if (user) {
-            const token = generateToken(user._id);
+            const token = generateToken(user._id,user.isAdmin);
             // console.log('token: ', token)
             const { password, ...others } = user._doc;
 
@@ -95,7 +95,7 @@ export const google = async (req, res, next) => {
             });
 
             const savedUser = await newUser.save();
-            const token = generateToken(savedUser._id);
+            const token = generateToken(savedUser._id,savedUser.isAdmin);
             // console.log('token: ', token)
             const { password, ...others } = savedUser._doc;
 

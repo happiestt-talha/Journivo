@@ -1,5 +1,6 @@
 import { Alert, Button, TextInput } from 'flowbite-react'
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteFailure, deleteStart, deleteSuccess, logout, updateFailure, updateStart, updateSuccess } from '../store/user/userSlice'
 import { app } from '../firebase/Firebase'
@@ -10,6 +11,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import axios from 'axios'
 
 const DashProfile = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const { currentUser } = useSelector((state) => state.user)
     const fileRef = useRef()
@@ -194,6 +196,9 @@ const DashProfile = () => {
                     <TextInput onChange={handleFormChange} type="name" id="username" label="username" placeholder='Username' defaultValue={currentUser?.username} />
                     <TextInput onChange={handleFormChange} type="email" id="email" label="Email address" placeholder='Email address' defaultValue={currentUser?.email} />
                     <TextInput onChange={handleFormChange} type="password" id="password" label="Password" placeholder='**********' />
+                    {
+                        currentUser.isAdmin && <Button gradientDuoTone="pinkToOrange"  onClick={() => navigate('/create-post')}>Create Post</Button>
+                    }
                     <Button gradientDuoTone="purpleToBlue" outline onClick={handleEditProfile} >Update</Button>
                 </form>
                 <div className='text-red-500 flex justify-between mt-3 '>

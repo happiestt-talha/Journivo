@@ -39,10 +39,10 @@ const Signup = () => {
         <>
             <div className='max-h-screen'>
                 <div className='mt-10 flex p-3 max-w-4xl mx-auto flex-col md:flex-row md:items-center gap-5'>
-                    {
-                        error && <Alert color='failure'> {error} </Alert>
-                    }
                     <div className='flex-1 '>
+                        {
+                            error && <Alert className='my-5' color='failure'> {error} </Alert>
+                        }
                         <Link to="/" className="flex items-center font-bold text-4xl dark:text-white">
                             <span
                                 className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-1 text-white rounded-lg dark:text-white">
