@@ -3,9 +3,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
+import connectDB from "./Database/db.js";
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
-import connectDB from "./Database/db.js";
+import postRoutes from "./routes/post.routes.js";
 
 dotenv.config();
 const app = express();
@@ -27,7 +28,7 @@ app.get('/', (req, res) => {
 // App Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
-
+app.use('/api/post', postRoutes)
 
 // Error Middleware
 app.use((err, req, res, next) => {

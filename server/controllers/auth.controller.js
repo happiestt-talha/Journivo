@@ -47,12 +47,12 @@ export const signin = async (req, res, next) => {
     try {
         const user = await User.findOne({ email })
         if (!user) {
-            return next(createError(400, "User not found"));
+            return next(createError(400, "Wrong credentials"));
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) {
-            return next(createError(400, "Wrong password"));
+            return next(createError(400, "Wrong credentials"));
         }
 
         const token = generateToken(user._id,user.isAdmin)
