@@ -29,25 +29,32 @@ export const createPost = async (req, res, next) => {
     }
 
 }
-
+export const getallposts = async (req, res, next) => {
+    try {
+        const posts = await Post.find();
+        res.status(200).json(posts);
+    } catch (error) {
+        next(error);
+    }
+}
 export const getPosts = async (req, res, next) => {
+    // ...(req.query.search && { title: new RegExp(req.query.search, "i") }),
     try {
         const startIndex = parseInt(req.query.startIndex) || 0;
-        const limit = parseInt(req.query.limit) || 10;
-        const sortDirection = req.query.order === "asc" ? 1 : -1;
-        const posts = await Post.find(
+        const limit = parseInt(req.query.limit) || 9;
+        const sortDirection = req.query.order === 'asc' ? 1 : -1;
+        const posts = await Post.find({
             ...(req.query.userId && { userId: req.query.userId }),
             ...(req.query.category && { category: req.query.category }),
             ...(req.query.slug && { slug: req.query.slug }),
             ...(req.query.postId && { _id: req.query.postId }),
             ...(req.query.searchTerm && {
                 $or: [
-                    { title: new RegExp(req.query.searchTerm, "i") },
-                    { content: new RegExp(req.query.searchTerm, "i") },
-                ]
+                    { title: { $regex: req.query.searchTerm, $options: 'i' } },
+                    { content: { $regex: req.query.searchTerm, $options: 'i' } },
+                ],
             }),
-            // ...(req.query.search && { title: new RegExp(req.query.search, "i") }),
-        )
+        })
             .sort({ createdAt: sortDirection })
             .skip(startIndex)
             .limit(limit);
@@ -70,7 +77,7 @@ export const getPosts = async (req, res, next) => {
         });
 
         const lastWeekPosts = await Post.find({
-            createdAt: { $gte: oneWeekAgo },    
+            createdAt: { $gte: oneWeekAgo },
         });
 
         res.status(200).json({ posts, totalPosts, lastMonthPosts, lastWeekPosts });

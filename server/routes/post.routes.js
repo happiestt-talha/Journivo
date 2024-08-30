@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-import { createPost, getPosts } from '../controllers/post.controller.js';
+import { createPost, getallposts, getPosts } from '../controllers/post.controller.js';
 import { verifyUser } from '../middlewares/verfiyUser.js';
 
 router.get("/test", (req, res) => {
@@ -8,6 +8,7 @@ router.get("/test", (req, res) => {
 })
 
 router.post("/create", verifyUser, createPost)
-router.get('"getPost',getPosts)
+router.get('/getallposts', getallposts)
+router.get('/getpost', getPosts)
 
 export default router
