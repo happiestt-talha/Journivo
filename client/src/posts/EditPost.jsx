@@ -1,5 +1,5 @@
 import { Alert, Button, Select, Spinner, TextInput } from 'flowbite-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { app } from '../firebase/Firebase';
@@ -7,10 +7,14 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const CreatePost = () => {
+const EditPost = () => {
+    const { postId } = useParams();
+    const { currentUser } = useSelector((state) => state.user)
     const navigate = useNavigate();
+    const [file, setFile] = useState(null);
     const [uploadError, setUploadError] = useState('');
     const [progress, setProgress] = useState(0);
     const [uploading, setUploading] = useState(false);
@@ -20,6 +24,15 @@ const CreatePost = () => {
         image: '',
         content: ''
     });
+
+    useEffect(() => {
+        const getPost = async () => {
+            const res = await axios.get(`/post/getpost?postId=${postId}`)
+            console.log('res: ', res.data.posts[0])
+            setFormData(res.data.posts[0])
+        }
+        getPost()
+    }, [postId])
 
     const optionData = [
         { id: 1, value: "general", name: "General" },
@@ -62,23 +75,26 @@ const CreatePost = () => {
 
     const handleImageOnChange = (e) => {
         const img = e.target.files[0];
+        setFile(img);
         setUploadError('');
-        if (img) {
-            handleImageUpload(img); // Use img instead of file
-        }
     };
 
-    const handleImageUpload = (img) => {
-        if (!img) {
+    useEffect(() => {
+        if (file) {
+            handleImageUpload(file);
+        }
+    }, [file]);
+    const handleImageUpload = (file) => {
+        if (!file) {
             return setUploadError('Please select an image');
         }
         setUploadError('');
-        console.log('Uploading image...');
+        setUploading(true);
 
         const storage = getStorage(app);
-        const fileName = new Date().getTime() + img.name;
+        const fileName = new Date().getTime() + file.name;
         const storageRef = ref(storage, fileName);
-        const uploadTask = uploadBytesResumable(storageRef, img);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
         uploadTask.on('state_changed', (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -91,8 +107,9 @@ const CreatePost = () => {
                     ...prevData,
                     image: downloadURL
                 }));
-                console.log('File available at', downloadURL);
             });
+
+            setUploading(false);
         });
     };
 
@@ -110,7 +127,7 @@ const CreatePost = () => {
         setUploadError('');
 
         try {
-            const res = await axios.post('/post/create', formData);
+            const res = await axios.put(`/post/update-post/${postId}/${currentUser.id}`, formData);
             if (res.status === 200) {
                 navigate(`/post-detail/${res.data.slug}`);
             } else {
@@ -131,9 +148,9 @@ const CreatePost = () => {
 
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-4 md:flex-row">
-                    <TextInput className='flex-1' id="title" type="text" placeholder="Title" required={true} onChange={handleFormOnChange} />
-                    <Select id="category" required={true} onChange={handleFormOnChange}>
-                        <option value="">Select Category</option>
+                    <TextInput className='flex-1' id="title" type="text" placeholder="Title" required={true} onChange={handleFormOnChange} value={formData.title} />
+                    <Select id="category" required={true} onChange={handleFormOnChange} value={formData.category}>
+                        <option>Select Category</option>
                         {optionData.map((option) => (
                             <option key={option.id} value={option.value}>{option.name}</option>
                         ))}
@@ -141,19 +158,19 @@ const CreatePost = () => {
                 </div>
 
                 <div className='flex gap-4 items-center justify-between border-dotted border-4 border-teal-400 p-3'>
-                    <TextInput id='file' accept='image/*' type="file" required={true} onChange={handleImageOnChange} />
-                    {progress > 0 && (
+                    <TextInput id='file' accept='image/*' type="file" onChange={handleImageOnChange} />
+                    {uploading && (
                         <CircularProgressbar
                             value={progress}
                             text={`${progress.toFixed(2)}%`}
                             className='w-16 h-16 ml-auto'
                         />
                     )}
+                    <Button gradientDuoTone={"pinkToOrange"} disabled={uploading} onClick={handleImageUpload}>Upload Image</Button>
                 </div>
 
-                {formData.image && <img src={formData.image} alt="uploaded pic" className='w-full h-60 object-cover' />}
+                {formData.image && <img src={formData.image} alt="uploaded pic" className='w-full h-72 object-cover' />}
 
-                {/* eslint-disable-next-line */}
                 <ReactQuill
                     className='p-3 h-72 mb-12'
                     theme="snow"
@@ -164,11 +181,11 @@ const CreatePost = () => {
                 />
 
                 <Button type='submit' gradientDuoTone={"pinkToOrange"}>
-                    {uploading ? <Spinner aria-label="Publishing" size="md" /> : 'Publish'}
+                    {uploading ? <Spinner aria-label="Uploading..." size="md" /> : 'Update Post'}
                 </Button>
             </form>
         </div>
     );
 };
 
-export default CreatePost;
+export default EditPost;
