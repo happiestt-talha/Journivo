@@ -77,16 +77,11 @@ export const signout = async (req, res, next) => {
     }
 }
 
-export const verifyAdmin = async (req, res, next) => {
+export const getUser = async (req, res, next) => {
     try {
-        console.log('Route hitted...')
-        console.log('req.user: ', req.user)
-        const user = await User.findById(req.user.id)
-        if (user.isAdmin) {
-            res.status(200).json("Admin Verified!")
-        } else {
-            return next(createError(403, "You are not an admin!"))
-        }
+        const user = await User.findById(req.params.userId)
+        const { password, ...others } = user._doc
+        res.status(200).json(others)
     } catch (error) {
         next(error)
     }
