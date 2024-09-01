@@ -13,8 +13,8 @@ import { useSelector } from 'react-redux';
 const EditPost = () => {
     const { postId } = useParams();
     const { currentUser } = useSelector((state) => state.user)
-    console.log('CurrentUser: ', currentUser)
-    console.log('postId: ', postId)
+    // console.log('CurrentUser: ', currentUser)
+    // console.log('postId: ', postId)
     const navigate = useNavigate();
     const [uploadError, setUploadError] = useState('');
     const [progress, setProgress] = useState(0);
@@ -29,7 +29,7 @@ const EditPost = () => {
     useEffect(() => {
         const getPost = async () => {
             const res = await axios.get(`/post/getpost?postId=${postId}`)
-            console.log('res: ', res.data.posts[0])
+            // console.log('res: ', res.data.posts[0])
             setFormData(res.data.posts[0])
         }
         getPost()
@@ -124,19 +124,18 @@ const EditPost = () => {
         setUploadError('');
 
         try {
-            console.log('Updating post...');
-            console.log('formData: ', formData);
+            // console.log('Updating post...');
+            // console.log('formData: ', formData);
             const res = await axios.put(`/post/update-post/${formData._id}/${currentUser._id}`, formData);
-            console.log('early res: ', res.data);
+            // console.log('early res: ', res.data);
             if (res.status === 200) {
                 navigate(`/post-detail/${res.data.slug}`);
             }
             else {
-                // setUploadError(res.data.message);
-                console.log('Error during post creation:', res.data);
+                setUploadError(res.data.message);
             }
         } catch (error) {
-            console.log('Error during post creation in error:', error);
+            // console.log('Error during post creation in error:', error);
             setUploadError(error.response?.data?.message || 'Something went wrong in Updating Post');
         } finally {
             setUploading(false);
