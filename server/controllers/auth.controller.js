@@ -57,7 +57,8 @@ export const signin = async (req, res, next) => {
 
         const token = generateToken(user._id,user.isAdmin)
 
-        console.log('token: ', token)
+        // console.log('token: ', token)
+        console.log('Sign in route hit')
 
         const { password: others, ...rest } = user._doc
 

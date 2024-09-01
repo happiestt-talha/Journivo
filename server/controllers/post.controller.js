@@ -86,6 +86,13 @@ export const getPosts = async (req, res, next) => {
     }
 }
 export const deletePost = async (req, res, next) => {
+    // console.log('Delete post route')
+    //     console.log({
+    //         postId: req.params.postId,
+    //         paramsId: req.params.userId,
+    //         userId: req.user.id,
+    //         isAdmin: req.user.isAdmin
+    //     })
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
         return next(createError(403, 'You are not allowed to delete this post'));
     }
@@ -98,9 +105,17 @@ export const deletePost = async (req, res, next) => {
 }
 export const updatePost = async (req, res, next) => {
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-        return next(createError(403, 'You are not allowed to delete this post'));
+        return next(createError(403, 'You are not allowed to update this post'));
     }
     try {
+        // console.log('Upadte post route')
+        // console.log({
+        //     postId: req.params.postId,
+        //     paramsId: req.params.userId,
+        //     userId: req.user.id,
+        //     isAdmin: req.user.isAdmin
+        // })
+
         const updatedPost = await Post.findByIdAndUpdate(req.params.postId,
             {
                 $set: {
@@ -113,6 +128,6 @@ export const updatePost = async (req, res, next) => {
             { new: true });
         res.status(200).json(updatedPost);
     } catch (error) {
-        next(createError(500, error));
+        next(error);
     }
 }

@@ -13,8 +13,9 @@ import { useSelector } from 'react-redux';
 const EditPost = () => {
     const { postId } = useParams();
     const { currentUser } = useSelector((state) => state.user)
+    console.log('CurrentUser: ', currentUser)
+    console.log('postId: ', postId)
     const navigate = useNavigate();
-    const [file, setFile] = useState(null);
     const [uploadError, setUploadError] = useState('');
     const [progress, setProgress] = useState(0);
     const [uploading, setUploading] = useState(false);
@@ -75,15 +76,11 @@ const EditPost = () => {
 
     const handleImageOnChange = (e) => {
         const img = e.target.files[0];
-        setFile(img);
-        setUploadError('');
+        if (img) {
+            handleImageUpload(img);
+        }
     };
 
-    useEffect(() => {
-        if (file) {
-            handleImageUpload(file);
-        }
-    }, [file]);
     const handleImageUpload = (file) => {
         if (!file) {
             return setUploadError('Please select an image');
@@ -127,14 +124,20 @@ const EditPost = () => {
         setUploadError('');
 
         try {
-            const res = await axios.put(`/post/update-post/${postId}/${currentUser.id}`, formData);
+            console.log('Updating post...');
+            console.log('formData: ', formData);
+            const res = await axios.put(`/post/update-post/${formData._id}/${currentUser._id}`, formData);
+            console.log('early res: ', res.data);
             if (res.status === 200) {
                 navigate(`/post-detail/${res.data.slug}`);
-            } else {
-                setUploadError(res.data.message);
+            }
+            else {
+                // setUploadError(res.data.message);
+                console.log('Error during post creation:', res.data);
             }
         } catch (error) {
-            setUploadError(error.response?.data?.message || 'Something went wrong');
+            console.log('Error during post creation in error:', error);
+            setUploadError(error.response?.data?.message || 'Something went wrong in Updating Post');
         } finally {
             setUploading(false);
         }
@@ -144,7 +147,7 @@ const EditPost = () => {
         <div className='p-3 max-w-3xl mx-auto min-h-screen'>
             <h1 className='text-center my-7 text-3xl font-semibold'>Create Post</h1>
 
-            {uploadError && <Alert className='my-3 font-semibold text-center' color="failure">{uploadError}</Alert>}
+            {uploadError && <Alert className='my-3 font-semibold text-center' color="failure">{typeof uploadError === 'string' ? uploadError : "Something went wrong"}</Alert>}
 
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-4 md:flex-row">
