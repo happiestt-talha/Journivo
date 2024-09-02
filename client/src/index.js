@@ -7,10 +7,12 @@ import { Provider } from 'react-redux';
 import { persistor, store } from './store/store';
 import { PersistGate } from 'redux-persist/integration/react'
 import ThemeProvider from './theme/ThemeProvider';
+import ErrorBoundary from './error/ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
+  <ErrorBoundary>
     <PersistGate persistor={persistor}>
       <Provider store={store}>
         <ThemeProvider>
@@ -18,6 +20,7 @@ root.render(
         </ThemeProvider>
       </Provider>
     </PersistGate>
+  </ErrorBoundary>
   // </React.StrictMode>
 );
 

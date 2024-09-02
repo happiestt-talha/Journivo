@@ -13,11 +13,13 @@ import AdminRoutes from "./security/AdminRoutes"
 import CreatePost from "./posts/CreatePost"
 import Post from "./posts/Post"
 import EditPost from "./posts/EditPost"
+import ScrollToTop from "./components/ScrollToTop"
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
+        <ScrollToTop />
         <Header />
         <Routes>
 

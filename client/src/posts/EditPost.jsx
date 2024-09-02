@@ -168,7 +168,7 @@ const EditPost = () => {
                             className='w-16 h-16 ml-auto'
                         />
                     )}
-                    <Button gradientDuoTone={"pinkToOrange"} disabled={uploading} onClick={handleImageUpload}>Upload Image</Button>
+                    {/* <Button gradientDuoTone={"pinkToOrange"} disabled={uploading} onClick={handleImageUpload}>Upload Image</Button> */}
                 </div>
 
                 {formData.image && <img src={formData.image} alt="uploaded pic" className='w-full h-72 object-cover' />}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { Button } from "flowbite-react"
 import Loader from "../components/Loader"
+import CallToAction from "../components/CallToAction"
 const Post = () => {
     const { slug } = useParams()
     const [post, setPost] = useState({})
@@ -57,7 +58,11 @@ const Post = () => {
 
                                 <div dangerouslySetInnerHTML={{ __html: post.content }} className="max-w-4xl mx-auto post-content"></div>
                             </div>
+                            <div className='max-w-4xl mx-auto w-full'>
+                                <CallToAction />
+                            </div>
                         </div>
+
                     </>
             }
         </>
