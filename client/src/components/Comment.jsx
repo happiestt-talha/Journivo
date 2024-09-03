@@ -1,5 +1,4 @@
 import axios from 'axios'
-import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { FaThumbsUp, FaTrash } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
@@ -57,7 +56,7 @@ const Comment = ({ comment, comments, setComments }) => {
                     <span>
                         <span className="flex items-center space-x-1 ">
                             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">@{user.username}</p>
-                            <p>{moment(comment.createdAt).fromNow()}</p>
+                            <p>{new Date(comment.createdAt).toDateString()}</p>
                         </span>
                         <p className="text-sm ">{comment.comment}</p>
                     </span>
