@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom"
 import { Button } from "flowbite-react"
 import Loader from "../components/Loader"
 import CallToAction from "../components/CallToAction"
+import CommentSection from "../components/CommentSection"
 const Post = () => {
     const { slug } = useParams()
     const [post, setPost] = useState({})
@@ -61,6 +62,7 @@ const Post = () => {
                             <div className='max-w-4xl mx-auto w-full'>
                                 <CallToAction />
                             </div>
+                            <CommentSection postId={post._id} />
                         </div>
 
                     </>
