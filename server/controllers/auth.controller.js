@@ -73,9 +73,11 @@ export const signin = async (req, res, next) => {
 export const google = async (req, res, next) => {
     const { username, email, profilePic } = req.body;
     try {
+        console.log('Google route hit')
         let user = await User.findOne({ email });
 
         if (user) {
+            console.log('User exists')
             const token = generateToken(user._id,user.isAdmin);
             // console.log('token: ', token)
             const { password, ...others } = user._doc;
@@ -84,7 +86,9 @@ export const google = async (req, res, next) => {
                 .cookie("access_token", token, { httpOnly: true })
                 .status(200)
                 .json(others);
+
         } else {
+            console.log('User does not exist')
             const generatedPassword = Math.random().toString(36).slice(-8);
             const hashedPassword = await bcrypt.hash(generatedPassword, 10);
 
@@ -106,7 +110,6 @@ export const google = async (req, res, next) => {
                 .json(others);
         }
     } catch (error) {
-        console.error('Sign up error', error);
-        return res.status(500).json({ message: 'Internal Server Error' });
+        next(error);
     }
 };
