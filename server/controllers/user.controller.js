@@ -55,16 +55,24 @@ export const updateUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
     try {
-        if (req.user.id !== req.params.id) {
-            return next(createError(403, "You can delete only your account!"))
-        } else {
-            await User.findByIdAndDelete(req.params.id)
-            res.status(200).json("User has been deleted!")
+        const userId = req.params.id
+
+        const user = await User.findById(userId)
+        if (!user) {
+            return next(createError(404, "User not found"))
         }
+
+        if (!req.user.isAdmin && req.user.id !== userId) {
+            return next(createError(403, "You can delete only your account!"))
+        }
+
+        await User.findByIdAndDelete(userId)
+        res.status(200).json("User has been deleted!")
     } catch (error) {
-        next(error)
+        next(createError(500, error.message || "Error deleting user"))
     }
 }
+
 
 export const signout = async (req, res, next) => {
     try {
@@ -93,7 +101,11 @@ export const getAllUsers = async (req, res, next) => {
             return next(createError(403, "You can't see all users!"))
         }
         const users = await User.find()
-        res.status(200).json(users)
+        const userWithoutPasswords = users.map((user) => {
+            const { password, ...others } = user._doc
+            return others
+        })
+        res.status(200).json(userWithoutPasswords)
     } catch (error) {
         next(error)
     }

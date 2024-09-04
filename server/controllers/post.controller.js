@@ -89,13 +89,6 @@ export const getPosts = async (req, res, next) => {
     }
 }
 export const deletePost = async (req, res, next) => {
-    // console.log('Delete post route')
-    //     console.log({
-    //         postId: req.params.postId,
-    //         paramsId: req.params.userId,
-    //         userId: req.user.id,
-    //         isAdmin: req.user.isAdmin
-    //     })
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
         return next(createError(403, 'You are not allowed to delete this post'));
     }

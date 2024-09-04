@@ -1,30 +1,41 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Table } from 'flowbite-react'
-import { useSelector } from 'react-redux'
+import { Alert, Table } from 'flowbite-react'
 import { FaCheck, FaTimes } from 'react-icons/fa'
 const DashUsers = () => {
-    const { currentUser } = useSelector((state) => state.user)
     const [users, setUsers] = useState([])
+    const [error, setError] = useState(null)
 
     const getUsers = async () => {
-        const res = await axios.get('/user/getallusers')
-        setUsers(res.data)
+        try {
+            setError(null)
+            const res = await axios.get('/user/getallusers')
+            setUsers(res.data)
+            console.log('users: ', res.data)
+        } catch (error) {
+            setError(error.response.data.message)
+        }
     }
+
     useEffect(() => {
         getUsers()
     }, [])
 
     const deleteUser = async (id) => {
-        console.log('id: ', id)
-        const res = await axios.delete(`/user/del-user/${id}/${currentUser._id}`)
-        if (res.status === 200) {
-            setUsers(users.filter((user) => user._id !== id))
+        try {
+            setError(null)
+            const res = await axios.delete(`/user/delete/${id}`)
+            if (res.status === 200) {
+                setUsers(users.filter((user) => user._id !== id))
+            }
+        } catch (error) {
+            setError(error.response.data.message)
         }
     }
     return (
         <>
             <div className="table-auto overflow-x-auto md:mx-auto p-3">
+                {error && <Alert color="failure">{error}</Alert>}
                 {
                     users.length > 0 ? (
                         <Table hoverable={true}>
@@ -43,7 +54,7 @@ const DashUsers = () => {
                                         <Table.Row className=" bg-white dark:border-gray-700 dark:bg-gray-800">
                                             <Table.Cell>{new Date(user.updatedAt).toLocaleDateString()}</Table.Cell>
                                             <Table.Cell>
-                                                    <img className='w-10 h-10 rounded-full object-cover bg-gray-500' src={user.profilePic} alt={user.title} />
+                                                <img className='w-10 h-10 rounded-full object-cover bg-gray-500' src={user.profilePic} alt={user.title} />
                                             </Table.Cell>
                                             <Table.Cell>{user.username}</Table.Cell>
                                             <Table.Cell>{user.email}</Table.Cell>
