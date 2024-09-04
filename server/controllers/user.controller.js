@@ -86,3 +86,15 @@ export const getUser = async (req, res, next) => {
         next(error)
     }
 }
+
+export const getAllUsers = async (req, res, next) => {
+    try {
+        if (!req.user.isAdmin) {
+            return next(createError(403, "You can't see all users!"))
+        }
+        const users = await User.find()
+        res.status(200).json(users)
+    } catch (error) {
+        next(error)
+    }
+}

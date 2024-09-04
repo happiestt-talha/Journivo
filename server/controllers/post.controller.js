@@ -31,6 +31,9 @@ export const createPost = async (req, res, next) => {
 }
 export const getallposts = async (req, res, next) => {
     try {
+        if (!req.user.isAdmin) {
+            return next(createError(403, 'You are not allowed to see all comments'))            
+        }
         const posts = await Post.find();
         res.status(200).json(posts);
     } catch (error) {

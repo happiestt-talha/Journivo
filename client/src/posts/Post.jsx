@@ -56,8 +56,9 @@ const Post = () => {
                                     <span>{new Date(post?.createdAt).toLocaleDateString()}</span>
                                     <span className="italic">{getReadTime(post?.content).toFixed(0)} min read</span>
                                 </div>
-
-                                <div dangerouslySetInnerHTML={{ __html: post.content }} className="max-w-4xl mx-auto post-content"></div>
+                                <span className="max-w-4xl mx-auto post-content">
+                                    <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
+                                </span>
                             </div>
                             <div className='max-w-4xl mx-auto w-full'>
                                 <CallToAction />

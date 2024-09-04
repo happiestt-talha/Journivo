@@ -34,7 +34,7 @@ export const getComments = async (req, res, next) => {
 export const deleteComment = async (req, res, next) => {
     try {
         const comment = await Comment.findById(req.params.commentId)
-        if (comment.userId === req.user.id) {
+        if (req.user.isAdmin || comment.userId === req.user.id) {
             await comment.deleteOne()
             res.status(200).json('the comment has been deleted')
         } else {
@@ -61,6 +61,18 @@ export const likeComment = async (req, res, next) => {
                 liked: false
             })
         }
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getAllComments = async (req, res, next) => {
+    try {
+        // if (!req.user.isAdmin) {
+        //     return next(createError(403, 'You are not allowed to see all comments'))            
+        // }
+        const comments = await Comment.find()
+        res.status(200).json(comments)
     } catch (error) {
         next(error)
     }
