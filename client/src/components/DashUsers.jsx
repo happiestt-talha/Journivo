@@ -10,7 +10,7 @@ const DashUsers = () => {
         try {
             setError(null)
             const res = await axios.get('/user/getallusers')
-            setUsers(res.data)
+            setUsers(res.data.users)
             console.log('users: ', res.data)
         } catch (error) {
             setError(error.response.data.message)

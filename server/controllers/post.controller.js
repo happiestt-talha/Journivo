@@ -41,7 +41,6 @@ export const getallposts = async (req, res, next) => {
     }
 }
 export const getPosts = async (req, res, next) => {
-    // ...(req.query.search && { title: new RegExp(req.query.search, "i") }),
     try {
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 9;

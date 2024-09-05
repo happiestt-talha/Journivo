@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Sidebar } from 'flowbite-react'
 import { Link, useLocation } from 'react-router-dom'
-import { HiUser, HiLogout, HiDocumentText, HiAnnotation, HiOutlineUserGroup } from 'react-icons/hi'
+import { HiUser, HiLogout, HiDocumentText, HiAnnotation, HiOutlineUserGroup, HiChartPie } from 'react-icons/hi'
 import { useSelector } from 'react-redux'
 
 const DashSidebar = () => {
@@ -21,6 +21,9 @@ const DashSidebar = () => {
                 <Sidebar.Items>
                     <Sidebar.ItemGroup className="flex flex-col gap-1">
 
+                        <Link to='/dashboard?tab=dashboard'>
+                            <Sidebar.Item active={tab === 'dashboard'} icon={HiChartPie} as={'div'}>Dashboard</Sidebar.Item>
+                        </Link>
                         <Link to='/dashboard?tab=profile'>
                             <Sidebar.Item active={tab === 'profile'} icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'user'} labelColor='dark' as={'div'}>Profile</Sidebar.Item>
                         </Link>

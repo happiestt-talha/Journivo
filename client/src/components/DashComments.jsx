@@ -13,8 +13,8 @@ const DashComments = () => {
         try {
             setError(null)
             const res = await axios.get('/comment/getallcomments')
-            setComments(res.data)
-            const userIds = [...new Set(res.data.map(comment => comment.userId))]
+            setComments(res.data.comments)
+            const userIds = [...new Set(res.data.comments.map(comment => comment.userId))]
             const usersRes = await Promise.all(userIds.map(id => axios.get(`/user/getuser/${id}`)))
             const usernamesMap = usersRes.reduce((acc, curr) => {
                 acc[curr.data._id] = curr.data.username
