@@ -69,7 +69,7 @@ const Comment = ({ comment, comments, setComments }) => {
                                     <FaThumbsUp />
                                 )}
                             </span>
-                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{comment.likes.length} {comment.likes.length === 1 ? 'Like' : 'Likes'}</span>
+                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{comment.totalLikes} {comment.likes.length === 1 ? 'Like' : 'Likes'}</span>
                         </span>
                         {
                             currentUser._id === comment.userId && (

@@ -48,20 +48,26 @@ export const deleteComment = async (req, res, next) => {
 export const likeComment = async (req, res, next) => {
     try {
         const comment = await Comment.findById(req.params.commentId);
-        const liked = comment.likes.includes(req.user.id);
+        let liked = comment.likes.includes(req.user.id);
         if (!comment) {
             return next(createError(404, 'Comment not found'));
         }
         const userIndex = comment.likes.indexOf(req.user.id);
+        console.log('User index: ', userIndex)
         if (userIndex === -1) {
             comment.likes.push(req.user.id);
             liked = true;
+            comment.totalLikes += 1;
         } else {
             comment.likes.splice(userIndex, 1);
             liked = false;
+            comment.totalLikes -= 1;
         }
+        console.log('Final total likes: ', totalLikes)
+        console.log('Final liked: ', liked)
         await comment.save();
-        res.status(200).json({ liked, totalLikes: comment.likes.length, likes: comment.likes });
+        
+        res.status(200).json({ liked, totalLikes });
     } catch (error) {
         next(error);
     }
