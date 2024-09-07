@@ -63,7 +63,7 @@ export const likeComment = async (req, res, next) => {
             liked = false;
             comment.totalLikes -= 1;
         }
-        console.log('Final total likes: ', totalLikes)
+        console.log('Final total likes: ', comment.totalLikes)
         console.log('Final liked: ', liked)
         await comment.save();
         
