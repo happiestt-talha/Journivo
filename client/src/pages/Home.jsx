@@ -1,21 +1,57 @@
-import { Carousel } from 'flowbite-react'
-import React from 'react'
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
+import { Link } from 'react-router-dom';
+import CallToAction from '../components/CallToAction';
+import { useEffect, useState } from 'react';
+import PostCard from '../components/PostCard';
+import axios from 'axios';
 
-const Home = () => {
+export default function Home() {
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const res=await axios.get('/post/getallposts');
+            setPosts(res.data);
+        };
+        fetchPosts();
+    }
+        , []);
     return (
-        <>
-            <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 w-full">
-                <Carousel leftControl={<FaArrowLeft size={24} />} rightControl={<FaArrowRight size={24} />} className='h-full w-full md:w-1/2  mx-auto'>
-                    <img src="https://images.pexels.com/photos/20332246/pexels-photo-20332246/free-photo-of-red-balcony-casting-shadow-on-wall.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" alt="Could not be loaded" />
-                    <img src="https://images.pexels.com/photos/27308308/pexels-photo-27308308/free-photo-of-lofoten-islands-of-norway.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Could not be loaded" />
-                    <img src="https://images.pexels.com/photos/20398838/pexels-photo-20398838/free-photo-of-handrail-shadow-on-white-and-red-wall.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Could not be loaded" />
-                    <img src="https://images.pexels.com/photos/5534545/pexels-photo-5534545.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" alt="Could not be loaded" />
-                    <img src="https://images.pexels.com/photos/11378684/pexels-photo-11378684.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" alt="Could not be loaded" />
-                </Carousel>
+        <div>
+            <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto '>
+                <h1 className='text-3xl font-bold lg:text-6xl'>Welcome to my Blog</h1>
+                <p className='text-gray-500 text-xs sm:text-sm'>
+                    Here you'll find a variety of articles and tutorials on topics such as
+                    web development, software engineering, and programming languages.
+                </p>
+                <Link
+                    to='/search'
+                    className='text-xs sm:text-sm text-teal-500 font-bold hover:underline'
+                >
+                    View all posts
+                </Link>
             </div>
-        </>
-    )
-}
+            <div className='p-3 bg-amber-100 dark:bg-slate-700'>
+                <CallToAction />
+            </div>
 
-export default Home
+            <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7'>
+                {posts && posts.length > 0 && (
+                    <div className='flex flex-col gap-6'>
+                        <h2 className='text-2xl font-semibold text-center'>Recent Posts</h2>
+                        <div className='flex flex-wrap gap-4 items-center justify-center'>
+                            {posts.map((post) => (
+                                <PostCard key={post._id} post={post} />
+                            ))}
+                        </div>
+                        <Link
+                            to={'/search'}
+                            className='text-lg text-teal-500 hover:underline text-center'
+                        >
+                            View all posts
+                        </Link>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

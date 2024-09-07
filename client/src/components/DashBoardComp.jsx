@@ -170,7 +170,7 @@ const DashBoardComp = () => {
                                     <Table.Body key={comment._id} className='divide-y'>
                                         <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                                             <Table.Cell className='w-96'>
-                                                <p className='line-clamp-2'>{comment.comment}</p>
+                                                <p className='line-clamp-2'>{comment.comment.length > 20 ? comment.comment.substring(0, 20) + '...' : comment.comment}</p>
                                             </Table.Cell>
                                             <Table.Cell>{comment.likes.length}</Table.Cell>
                                         </Table.Row>

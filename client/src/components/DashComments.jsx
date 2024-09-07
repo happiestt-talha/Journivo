@@ -12,7 +12,7 @@ const DashComments = () => {
     const getComments = async () => {
         try {
             setError(null)
-            const res = await axios.get('/comment/getallcomments')
+            const res = await axios.get('/comment/getallcomments?limit=1000')
             setComments(res.data.comments)
             const userIds = [...new Set(res.data.comments.map(comment => comment.userId))]
             const usersRes = await Promise.all(userIds.map(id => axios.get(`/user/getuser/${id}`)))
