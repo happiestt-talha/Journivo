@@ -54,8 +54,8 @@ const DashComments = () => {
                             <Table.HeadCell>Date Updated</Table.HeadCell>
                             <Table.HeadCell>Username</Table.HeadCell>
                             <Table.HeadCell>Comment</Table.HeadCell>
+                            <Table.HeadCell>Likes</Table.HeadCell>
                             <Table.HeadCell>Post Id</Table.HeadCell>
-                            <Table.HeadCell>User Id</Table.HeadCell>
                             <Table.HeadCell>Delete</Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
@@ -64,9 +64,9 @@ const DashComments = () => {
                                     <Table.Row key={comment._id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                         <Table.Cell>{new Date(comment.updatedAt).toLocaleDateString()}</Table.Cell>
                                         <Table.Cell>{usernames[comment.userId]}</Table.Cell>
-                                        <Table.Cell className='truncate'>{comment.comment.substring(0, 50) + "..."}</Table.Cell>
+                                        <Table.Cell>{comment.comment.length < 30 ? comment.comment : comment.comment.substring(0, 30) + "..."}</Table.Cell>
+                                        <Table.Cell>{comment.totalLikes}</Table.Cell>
                                         <Table.Cell>{comment.postId}</Table.Cell>
-                                        <Table.Cell>{comment.userId}</Table.Cell>
                                         <Table.Cell>
                                             <button
                                                 className='text-rose-500 hover:text-red-600'

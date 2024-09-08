@@ -60,7 +60,7 @@ const Post = () => {
                             <div className="max-w-4xl mx-auto">
                                 <h1 className="text-3xl font-serif my-6">{post?.title}</h1>
                                 <span className="">By: {author?.username}</span>
-                                <Link to={`/search?q=${post?.category}`}>
+                                <Link to={`/search?category=${post?.category}`}>
                                     <Button pill color="light" size="sm" className="mb-6 mx-auto text-teal-400">{post?.category}</Button>
                                 </Link>
 

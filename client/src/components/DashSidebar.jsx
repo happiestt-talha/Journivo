@@ -21,9 +21,9 @@ const DashSidebar = () => {
                 <Sidebar.Items>
                     <Sidebar.ItemGroup className="flex flex-col gap-1">
 
-                        <Link to='/dashboard?tab=dashboard'>
+                        {currentUser.isAdmin && <Link to='/dashboard?tab=dashboard'>
                             <Sidebar.Item active={tab === 'dashboard'} icon={HiChartPie} as={'div'}>Dashboard</Sidebar.Item>
-                        </Link>
+                        </Link>}
                         <Link to='/dashboard?tab=profile'>
                             <Sidebar.Item active={tab === 'profile'} icon={HiUser} label={currentUser.isAdmin ? 'Admin' : 'user'} labelColor='dark' as={'div'}>Profile</Sidebar.Item>
                         </Link>

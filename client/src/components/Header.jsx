@@ -1,35 +1,31 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
-import logo from '../assets/icons/blog-50.png'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from '../store/theme/themeSlice';
 import { logout } from '../store/user/userSlice';
-import axios from 'axios'
+import { useEffect, useState } from 'react';
+import logo from '../assets/icons/blog-50.png';
+import axios from 'axios';
 
 export default function Header() {
     const path = useLocation().pathname;
-    const dispatch = useDispatch()
-    const data = [
-        {
-            id: 1,
-            name: 'Home',
-            path: '/'
-        },
-        {
-            id: 2,
-            name: 'About',
-            path: '/about'
-        },
-        {
-            id: 3,
-            name: 'Projects',
-            path: '/projects'
+    const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { currentUser } = useSelector((state) => state.user);
+    const { theme } = useSelector((state) => state.theme);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        const searchTermFromUrl = urlParams.get('searchTerm');
+        if (searchTermFromUrl) {
+            setSearchTerm(searchTermFromUrl);
         }
-    ]
-    const { currentUser } = useSelector((state) => state.user)
-    const { theme } = useSelector((state) => state.theme)
+    }, [location.search]);
+
     const handleTheme = () => {
         dispatch(toggleTheme())
     }
@@ -37,9 +33,19 @@ export default function Header() {
         const res = await axios.post('/user/logout')
         console.log('res: ', res)
         if (res.status === 200) {
+            navigate('/login')
             dispatch(logout())
         }
     }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('searchTerm', searchTerm);
+        const searchQuery = urlParams.toString();
+        navigate(`/search?${searchQuery}`);
+    };
+
     return (
         <Navbar className='border-b-2'>
             <Link to="/" className="flex items-center">
@@ -55,60 +61,67 @@ export default function Header() {
                     className='font-bold text-xl hidden md:inline'
                 >'s Blog</span>
             </Link>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <TextInput
                     type='text'
                     placeholder='Search...'
                     rightIcon={AiOutlineSearch}
                     className='hidden lg:inline'
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </form>
-
             <Button className='w-12 h-10 lg:hidden' color='gray' pill>
                 <AiOutlineSearch />
             </Button>
-
             <div className='flex gap-2 md:order-2'>
-                <Button className='w-12 h-10  sm:inline' color='gray' pill onClick={handleTheme}>
-                    {theme === 'dark' ? <FaMoon /> : <FaSun />}
+                <Button
+                    className='w-12 h-10 hidden sm:inline'
+                    color='gray'
+                    pill
+                    onClick={handleTheme}
+                >
+                    {theme === 'light' ? <FaSun /> : <FaMoon />}
                 </Button>
-                {
-                    currentUser
-                        ? (
-                            <Dropdown arrowIcon={false}
-                                inline
-                                label={<Avatar alt={currentUser.username + "'s avatar"} img={currentUser.profilePic} rounded />}
-                            >
-                                <Dropdown.Header>
-                                    <span className="block text-sm">  @{currentUser.username} </span>
-                                    <span className="block text-sm font-medium truncate">{currentUser.email}</span>
-                                </Dropdown.Header>
-                                <Link to="/dashboard?tab=profile">
-                                    <Dropdown.Item>Profile</Dropdown.Item>
-                                </Link>
-                                <Dropdown.Divider />
-                                <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
-                            </Dropdown>
-                        )
-                        : (<Link to='/sign-in'>
-                            <Button gradientDuoTone='purpleToBlue'>Sign In</Button>
-                        </Link>)
-                }
+                {currentUser ? (
+                    <Dropdown
+                        arrowIcon={false}
+                        inline
+                        label={
+                            <Avatar alt='user' img={currentUser.profilePic} rounded />
+                        }
+                    >
+                        <Dropdown.Header>
+                            <span className='block text-sm'>@{currentUser.username}</span>
+                            <span className='block text-sm font-medium truncate'>
+                                {currentUser.email}
+                            </span>
+                        </Dropdown.Header>
+                        <Link to={'/dashboard?tab=profile'}>
+                            <Dropdown.Item>Profile</Dropdown.Item>
+                        </Link>
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
+                    </Dropdown>
+                ) : (
+                    <Link to='/sign-in'>
+                        <Button gradientDuoTone='purpleToBlue' outline>
+                            Sign In
+                        </Button>
+                    </Link>
+                )}
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
-                {
-                    data.map((item) => (
-                        <Navbar.Link
-                            key={item.id}
-                            active={path === item.path}
-                            as={Link}
-                            to={item.path}
-                        >
-                            {item.name}
-                        </Navbar.Link>
-                    ))
-                }
+                <Navbar.Link active={path === '/'} as={'div'}>
+                    <Link to='/'>Home</Link>
+                </Navbar.Link>
+                <Navbar.Link active={path === '/about'} as={'div'}>
+                    <Link to='/about'>About</Link>
+                </Navbar.Link>
+                <Navbar.Link active={path === '/projects'} as={'div'}>
+                    <Link to='/projects'>Projects</Link>
+                </Navbar.Link>
             </Navbar.Collapse>
         </Navbar>
     );

@@ -14,6 +14,7 @@ import CreatePost from "./posts/CreatePost"
 import Post from "./posts/Post"
 import EditPost from "./posts/EditPost"
 import ScrollToTop from "./components/ScrollToTop"
+import Search from "./pages/Search"
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/sign-in" element={<Signin />} />
           <Route path="/sign-up" element={<Signup />} />
           <Route path="/post-detail/:slug" element={<Post />} />
+          <Route path="/search" element={<Search />} />
 
           <Route element={<PrivateRoutes />}>
             <Route path="/dashboard" element={<Dashboard />} />

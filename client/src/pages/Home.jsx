@@ -3,14 +3,19 @@ import CallToAction from '../components/CallToAction';
 import { useEffect, useState } from 'react';
 import PostCard from '../components/PostCard';
 import axios from 'axios';
+import { Alert } from 'flowbite-react';
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
-
+    const [error, setError] = useState('');
     useEffect(() => {
         const fetchPosts = async () => {
-            const res=await axios.get('/post/getallposts');
-            setPosts(res.data);
+            try {
+                const res = await axios.get('/post/getallposts');
+                setPosts(res.data);
+            } catch (error) {
+                setError(error.response.data.message);
+            }
         };
         fetchPosts();
     }
@@ -18,6 +23,7 @@ export default function Home() {
     return (
         <div>
             <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto '>
+                {error && <Alert color='failure'>{error}</Alert>}
                 <h1 className='text-3xl font-bold lg:text-6xl'>Welcome to my Blog</h1>
                 <p className='text-gray-500 text-xs sm:text-sm'>
                     Here you'll find a variety of articles and tutorials on topics such as

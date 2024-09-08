@@ -19,19 +19,20 @@ const Dashboard = () => {
         }
     }, [location.search]);
 
-    
+
     return (
         <>
             <div className='flex flex-col md:flex-row min-h-screen'>
                 <div className=''>
                     <DashSidebar />
                 </div>
-                
-                {tab === 'profile' && <DashProfile />}
-                {tab === 'posts' && <DashPosts />}
-                {tab === 'comments' && <DashComments />}
-                {tab === 'users' && <DashUsers />}
-                {tab === 'dashboard' && <DashBoardComp />}
+                {/* <span className='p-3'> */}
+                    {tab === 'profile' && <DashProfile />}
+                    {tab === 'posts' && <DashPosts />}
+                    {tab === 'comments' && <DashComments />}
+                    {tab === 'users' && <DashUsers />}
+                    {tab === 'dashboard' && <DashBoardComp />}
+                {/* </span> */}
 
             </div>
         </>

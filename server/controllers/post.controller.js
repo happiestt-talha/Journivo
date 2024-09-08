@@ -31,9 +31,9 @@ export const createPost = async (req, res, next) => {
 }
 export const getallposts = async (req, res, next) => {
     try {
-        if (!req.user.isAdmin) {
-            return next(createError(403, 'You are not allowed to see all comments'))            
-        }
+        // if (!req.user.isAdmin) {
+        //     return next(createError(403, 'You are not allowed to see all Posts'))            
+        // }
         const posts = await Post.find();
         res.status(200).json(posts);
     } catch (error) {
@@ -42,6 +42,7 @@ export const getallposts = async (req, res, next) => {
 }
 export const getPosts = async (req, res, next) => {
     try {
+        console.log('Request: ', req.query)
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 9;
         const sortDirection = req.query.order === 'asc' ? 1 : -1;
