@@ -15,7 +15,6 @@ import Post from "./posts/Post"
 import EditPost from "./posts/EditPost"
 import ScrollToTop from "./components/ScrollToTop"
 import Search from "./pages/Search"
-import Error500 from "./error/Error500"
 
 const App = () => {
   return (
@@ -32,7 +31,6 @@ const App = () => {
           <Route path="/sign-up" element={<Signup />} />
           <Route path="/post-detail/:slug" element={<Post />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/err" element={<Error500 />} />
 
           <Route element={<PrivateRoutes />}>
             <Route path="/dashboard" element={<Dashboard />} />

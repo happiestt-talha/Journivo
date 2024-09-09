@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Error500 from './Error500'
 
 export class ErrorBoundary extends Component {
     constructor(props) {
@@ -21,9 +22,7 @@ export class ErrorBoundary extends Component {
     render() {
         if (this.state.hasError) {
             return (
-                <div>
-                    Something went wrong
-                </div>
+                <Error500 />
             )
         }
         return (
