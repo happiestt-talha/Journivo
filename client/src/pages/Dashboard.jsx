@@ -26,13 +26,11 @@ const Dashboard = () => {
                 <div className=''>
                     <DashSidebar />
                 </div>
-                {/* <span className='p-3'> */}
                     {tab === 'profile' && <DashProfile />}
                     {tab === 'posts' && <DashPosts />}
                     {tab === 'comments' && <DashComments />}
                     {tab === 'users' && <DashUsers />}
                     {tab === 'dashboard' && <DashBoardComp />}
-                {/* </span> */}
 
             </div>
         </>
