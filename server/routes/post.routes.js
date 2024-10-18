@@ -8,8 +8,8 @@ router.get("/test", (req, res) => {
 })
 
 router.post("/create", verifyUser, createPost)
-router.get('/getallposts',verifyUser, getallposts)
-router.get('/getpost', getPosts)
+router.get('/getallposts', getallposts)
+router.get('/getpost',verifyUser, getPosts)
 router.delete('/del-post/:postId/:userId', verifyUser, deletePost)
 router.put('/update-post/:postId/:userId', verifyUser, updatePost)
 

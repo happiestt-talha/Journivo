@@ -11,17 +11,17 @@ import ErrorBoundary from './error/ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
-  <ErrorBoundary>
-    <PersistGate persistor={persistor}>
-      <Provider store={store}>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
-      </Provider>
-    </PersistGate>
-  </ErrorBoundary>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <ErrorBoundary>
+      <PersistGate persistor={persistor}>
+        <Provider store={store}>
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
+        </Provider>
+      </PersistGate>
+    </ErrorBoundary>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

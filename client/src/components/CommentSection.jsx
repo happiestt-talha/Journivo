@@ -59,10 +59,11 @@ const CommentSection = ({ postId }) => {
                             required
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
+                            maxLength={200}
                         />
                     </form>
                     <div className='flex justify-between items-center mt-3 px-3'>
-                        <p className='text-gray-500'>200 characters left</p>
+                        <p className='text-gray-500'>{200 - comment.length} characters left</p>
                         <Button gradientDuoTone='purpleToPink' className='rounded-tl-xl rounded-bl-none rounded-tr-none rounded-br-xl' onClick={handleComment}>Submit</Button>
                     </div>
                 </div>
